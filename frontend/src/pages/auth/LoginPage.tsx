@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Wallet, ArrowRight } from 'lucide-react'
+import { Wallet, ArrowRight, Sparkles } from 'lucide-react'
 import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
 import { useUserStore } from '@/entities/user/model/userStore'
@@ -8,25 +8,49 @@ import { apiClient } from '@/shared/api/apiClient'
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate()
+  const token = useUserStore((state) => state.token)
   const setAuth = useUserStore((state) => state.setAuth)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  useEffect(() => {
+    if (token) {
+      navigate('/app/dashboard', { replace: true })
+    }
+  }, [token, navigate])
+
+  const performLogin = async (loginEmail: string, loginPass: string) => {
     setLoading(true)
     setError(null)
     try {
-      const res = await apiClient.post('/auth/login', { email, password })
+      const res = await apiClient.post('/auth/login', {
+        email: loginEmail.trim(),
+        password: loginPass,
+      })
       setAuth(res.data.user, res.data.token)
       navigate('/app/dashboard')
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Ошибка авторизации. Проверьте данные.')
+      const valErrors = err.response?.data?.validationErrors
+      const msg = valErrors
+        ? Object.values(valErrors).join(', ')
+        : err.response?.data?.message || 'Ошибка авторизации. Проверьте данные.'
+      setError(msg)
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    performLogin(email, password)
+  }
+
+  const handleDemoLogin = () => {
+    setEmail('demo@financetracker.com')
+    setPassword('password123')
+    performLogin('demo@financetracker.com', 'password123')
   }
 
   return (
@@ -69,11 +93,30 @@ export const LoginPage: React.FC = () => {
             />
           </div>
 
-          <Button type="submit" disabled={loading} className="w-full mt-3 py-3">
+          <Button type="submit" disabled={loading} className="w-full mt-2 py-3">
             {loading ? 'Вход...' : 'Войти'}
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </form>
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-[#30363d]"></div>
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-[#161b22] px-2 text-[#8d96a0]">или</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleDemoLogin}
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[#21262d] hover:bg-[#30363d] text-[#f0f6fc] text-sm font-medium rounded-xl border border-[#30363d] transition-colors cursor-pointer"
+        >
+          <Sparkles className="w-4 h-4 text-amber-400" />
+          Демо-вход в 1 клик
+        </button>
 
         <p className="text-center text-xs text-[#8d96a0] mt-6">
           Нет аккаунта?{' '}

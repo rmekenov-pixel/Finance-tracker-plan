@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Wallet, ArrowRight } from 'lucide-react'
 import { Button } from '@/shared/ui/Button'
@@ -8,6 +8,7 @@ import { apiClient } from '@/shared/api/apiClient'
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate()
+  const token = useUserStore((state) => state.token)
   const setAuth = useUserStore((state) => state.setAuth)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -16,16 +17,31 @@ export const RegisterPage: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  useEffect(() => {
+    if (token) {
+      navigate('/app/dashboard', { replace: true })
+    }
+  }, [token, navigate])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
     try {
-      const res = await apiClient.post('/auth/register', { name, email, password, currency })
+      const res = await apiClient.post('/auth/register', {
+        name: name.trim(),
+        email: email.trim(),
+        password,
+        currency,
+      })
       setAuth(res.data.user, res.data.token)
       navigate('/app/dashboard')
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Ошибка регистрации. Попробуйте снова.')
+      const valErrors = err.response?.data?.validationErrors
+      const msg = valErrors
+        ? Object.values(valErrors).join(', ')
+        : err.response?.data?.message || 'Ошибка регистрации. Попробуйте снова.'
+      setError(msg)
     } finally {
       setLoading(false)
     }

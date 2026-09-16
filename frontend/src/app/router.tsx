@@ -11,7 +11,15 @@ import { NotesPage } from '@/pages/app/NotesPage'
 import { AnalyticsPage } from '@/pages/app/AnalyticsPage'
 import { ProfilePage } from '@/pages/app/ProfilePage'
 
+import { useUserStore } from '@/entities/user/model/userStore'
+
 const ProtectedLayout: React.FC = () => {
+  const token = useUserStore((state) => state.token)
+
+  if (!token) {
+    return <Navigate to="/auth/login" replace />
+  }
+
   return (
     <div className="flex min-h-screen bg-[#0a0a0c] text-zinc-100 flex-col md:flex-row">
       <Sidebar />
