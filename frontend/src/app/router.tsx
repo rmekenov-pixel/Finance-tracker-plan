@@ -1,6 +1,7 @@
 import React from 'react'
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
 import { Sidebar } from '@/widgets/Sidebar/Sidebar'
+import { BottomNav } from '@/widgets/BottomNav/BottomNav'
 import { LoginPage } from '@/pages/auth/LoginPage'
 import { RegisterPage } from '@/pages/auth/RegisterPage'
 import { DashboardPage } from '@/pages/app/DashboardPage'
@@ -12,13 +13,14 @@ import { ProfilePage } from '@/pages/app/ProfilePage'
 
 const ProtectedLayout: React.FC = () => {
   return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100">
+    <div className="flex min-h-screen bg-slate-950 text-slate-100 flex-col md:flex-row">
       <Sidebar />
-      <main className="flex-1 p-8 overflow-y-auto max-h-screen">
+      <main className="flex-1 p-4 pb-24 md:p-8 md:pb-8 overflow-y-auto max-h-screen">
         <div className="max-w-6xl mx-auto">
           <Outlet />
         </div>
       </main>
+      <BottomNav />
     </div>
   )
 }

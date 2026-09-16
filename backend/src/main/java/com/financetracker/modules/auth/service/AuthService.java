@@ -1,8 +1,10 @@
 package com.financetracker.modules.auth.service;
 
 import com.financetracker.modules.auth.dto.AuthResponse;
+import com.financetracker.modules.auth.dto.ChangePasswordRequest;
 import com.financetracker.modules.auth.dto.LoginRequest;
 import com.financetracker.modules.auth.dto.RegisterRequest;
+import com.financetracker.modules.auth.dto.UpdateProfileRequest;
 import com.financetracker.modules.auth.dto.UserDto;
 import com.financetracker.modules.auth.entity.User;
 import com.financetracker.modules.auth.repository.UserRepository;
@@ -70,5 +72,35 @@ public class AuthService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         return UserDto.fromEntity(user);
+    }
+
+    @Transactional
+    public UserDto updateProfile(UUID userId, UpdateProfileRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+        user.setName(request.getName().trim());
+        if (request.getCurrency() != null && !request.getCurrency().isBlank()) {
+            user.setCurrency(request.getCurrency());
+        }
+        if (request.getAvatarUrl() != null) {
+            user.setAvatarUrl(request.getAvatarUrl());
+        }
+
+        User updated = userRepository.save(user);
+        return UserDto.fromEntity(updated);
+    }
+
+    @Transactional
+    public void changePassword(UUID userId, ChangePasswordRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPasswordHash())) {
+            throw new BadRequestException("Старый пароль указан неверно");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -73,5 +75,45 @@ class AuthServiceTest {
                 .build();
 
         assertThrows(UnauthorizedException.class, () -> authService.login(wrongLogin));
+    }
+
+    @Test
+    void updateProfileAndChangePassword_Success() {
+        RegisterRequest registerReq = RegisterRequest.builder()
+                .email("profile_change@test.com")
+                .password("oldPassword123")
+                .name("Old Name")
+                .currency("KZT")
+                .build();
+
+        AuthResponse resp = authService.register(registerReq);
+        UUID userId = resp.getUser().getId();
+
+        // Update Profile
+        com.financetracker.modules.auth.dto.UpdateProfileRequest updateReq = com.financetracker.modules.auth.dto.UpdateProfileRequest.builder()
+                .name("New Name")
+                .currency("USD")
+                .build();
+
+        com.financetracker.modules.auth.dto.UserDto updated = authService.updateProfile(userId, updateReq);
+        assertEquals("New Name", updated.getName());
+        assertEquals("USD", updated.getCurrency());
+
+        // Change Password
+        com.financetracker.modules.auth.dto.ChangePasswordRequest changePwdReq = com.financetracker.modules.auth.dto.ChangePasswordRequest.builder()
+                .oldPassword("oldPassword123")
+                .newPassword("newPassword456")
+                .build();
+
+        authService.changePassword(userId, changePwdReq);
+
+        // Login with new password
+        LoginRequest newLogin = LoginRequest.builder()
+                .email("profile_change@test.com")
+                .password("newPassword456")
+                .build();
+
+        AuthResponse newAuth = authService.login(newLogin);
+        assertNotNull(newAuth.getToken());
     }
 }

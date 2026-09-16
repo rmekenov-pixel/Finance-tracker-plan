@@ -1,9 +1,6 @@
 package com.financetracker.modules.auth.controller;
 
-import com.financetracker.modules.auth.dto.AuthResponse;
-import com.financetracker.modules.auth.dto.LoginRequest;
-import com.financetracker.modules.auth.dto.RegisterRequest;
-import com.financetracker.modules.auth.dto.UserDto;
+import com.financetracker.modules.auth.dto.*;
 import com.financetracker.modules.auth.service.AuthService;
 import com.financetracker.shared.security.SecurityUtils;
 import jakarta.validation.Valid;
@@ -39,6 +36,20 @@ public class AuthController {
         UUID currentUserId = SecurityUtils.getCurrentUserId();
         UserDto user = authService.getCurrentUser(currentUserId);
         return ResponseEntity.ok(user);
+    }
+
+    @PatchMapping("/profile")
+    public ResponseEntity<UserDto> updateProfile(@Valid @RequestBody UpdateProfileRequest request) {
+        UUID currentUserId = SecurityUtils.getCurrentUserId();
+        UserDto updated = authService.updateProfile(currentUserId, request);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<Map<String, String>> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        UUID currentUserId = SecurityUtils.getCurrentUserId();
+        authService.changePassword(currentUserId, request);
+        return ResponseEntity.ok(Map.of("message", "Пароль успешно изменен"));
     }
 
     @PostMapping("/logout")

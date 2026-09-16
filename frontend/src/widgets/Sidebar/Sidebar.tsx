@@ -26,7 +26,7 @@ export const Sidebar: React.FC = () => {
   ]
 
   return (
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between p-4 min-h-screen">
+    <aside className="hidden md:flex w-64 bg-slate-900 border-r border-slate-800 flex-col justify-between p-4 min-h-screen shrink-0">
       <div className="flex flex-col gap-6">
         {/* Logo */}
         <div className="flex items-center gap-3 px-3 py-2">
