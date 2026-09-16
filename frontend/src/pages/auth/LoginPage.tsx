@@ -5,6 +5,7 @@ import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
 import { useUserStore } from '@/entities/user/model/userStore'
 import { apiClient } from '@/shared/api/apiClient'
+import { GoogleLoginButton } from '@/features/auth/ui/GoogleLoginButton'
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate()
@@ -104,19 +105,23 @@ export const LoginPage: React.FC = () => {
             <div className="w-full border-t border-[#30363d]"></div>
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-[#161b22] px-2 text-[#8d96a0]">или</span>
+            <span className="bg-[#161b22] px-2 text-[#8d96a0]">или продолжить через</span>
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={handleDemoLogin}
-          disabled={loading}
-          className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[#21262d] hover:bg-[#30363d] text-[#f0f6fc] text-sm font-medium rounded-xl border border-[#30363d] transition-colors cursor-pointer"
-        >
-          <Sparkles className="w-4 h-4 text-amber-400" />
-          Демо-вход в 1 клик
-        </button>
+        <div className="flex flex-col gap-3">
+          <GoogleLoginButton onError={(msg) => setError(msg)} onLoading={setLoading} />
+
+          <button
+            type="button"
+            onClick={handleDemoLogin}
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[#21262d] hover:bg-[#30363d] text-[#f0f6fc] text-sm font-medium rounded-xl border border-[#30363d] transition-colors cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            Демо-вход в 1 клик
+          </button>
+        </div>
 
         <p className="text-center text-xs text-[#8d96a0] mt-6">
           Нет аккаунта?{' '}

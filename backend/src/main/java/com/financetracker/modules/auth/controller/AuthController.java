@@ -31,6 +31,12 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/google")
+    public ResponseEntity<AuthResponse> loginWithGoogle(@Valid @RequestBody GoogleAuthRequest request) {
+        AuthResponse response = authService.loginWithGoogle(request);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/me")
     public ResponseEntity<UserDto> getCurrentUser() {
         UUID currentUserId = SecurityUtils.getCurrentUserId();

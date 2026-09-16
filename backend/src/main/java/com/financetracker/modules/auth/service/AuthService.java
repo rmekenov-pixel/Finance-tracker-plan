@@ -19,6 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.client.RestTemplate;
+import java.util.Map;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -65,6 +70,46 @@ public class AuthService {
                 .token(token)
                 .user(UserDto.fromEntity(user))
                 .build();
+    }
+
+    @Transactional
+    public AuthResponse loginWithGoogle(com.financetracker.modules.auth.dto.GoogleAuthRequest request) {
+        String idToken = request.getIdToken();
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String url = "https://oauth2.googleapis.com/tokeninfo?id_token=" + idToken;
+            @SuppressWarnings("unchecked")
+            Map<String, Object> googleInfo = restTemplate.getForObject(url, Map.class);
+
+            if (googleInfo == null || !googleInfo.containsKey("email")) {
+                throw new UnauthorizedException("Недействительный Google токен");
+            }
+
+            String email = ((String) googleInfo.get("email")).toLowerCase().trim();
+            String name = (String) googleInfo.getOrDefault("name", "Google User");
+            String picture = (String) googleInfo.get("picture");
+
+            User user = userRepository.findByEmail(email).orElseGet(() -> {
+                User newUser = User.builder()
+                        .email(email)
+                        .name(name != null && !name.isBlank() ? name : email)
+                        .passwordHash(passwordEncoder.encode(UUID.randomUUID().toString()))
+                        .avatarUrl(picture)
+                        .currency("KZT")
+                        .build();
+                return userRepository.save(newUser);
+            });
+
+            String token = jwtService.generateToken(user.getId(), user.getEmail());
+
+            return AuthResponse.builder()
+                    .token(token)
+                    .user(UserDto.fromEntity(user))
+                    .build();
+        } catch (Exception e) {
+            log.error("Google authentication failed", e);
+            throw new UnauthorizedException("Ошибка авторизации Google: " + e.getMessage());
+        }
     }
 
     @Transactional(readOnly = true)

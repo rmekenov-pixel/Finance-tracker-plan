@@ -5,6 +5,7 @@ import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
 import { useUserStore } from '@/entities/user/model/userStore'
 import { apiClient } from '@/shared/api/apiClient'
+import { GoogleLoginButton } from '@/features/auth/ui/GoogleLoginButton'
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate()
@@ -110,6 +111,17 @@ export const RegisterPage: React.FC = () => {
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </form>
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-[#30363d]"></div>
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-[#161b22] px-2 text-[#8d96a0]">или продолжить через</span>
+          </div>
+        </div>
+
+        <GoogleLoginButton onError={(msg) => setError(msg)} onLoading={setLoading} />
 
         <p className="text-center text-xs text-[#8d96a0] mt-6">
           Уже есть аккаунт?{' '}
