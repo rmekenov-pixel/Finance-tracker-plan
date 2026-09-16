@@ -12,7 +12,7 @@ interface KanbanBoardProps {
 }
 
 const COLUMNS: { id: GoalStatus; title: string }[] = [
-  { id: 'PLANNED', title: 'Запланировано' },
+  { id: 'PLANNED', title: 'В планах' },
   { id: 'IN_PROGRESS', title: 'В процессе' },
   { id: 'DONE', title: 'Выполнено' },
 ]
@@ -44,19 +44,19 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
         {COLUMNS.map((col) => {
           const colGoals = getColumnGoals(col.id)
 
           return (
             <div
               key={col.id}
-              className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex flex-col gap-4 min-h-[500px]"
+              className="bg-[#121216] border border-[#30363d] rounded-xl p-3.5 flex flex-col gap-3 min-h-[500px] shadow-xs"
             >
               {/* Column Header */}
-              <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-                <h3 className="text-sm font-semibold text-slate-200">{col.title}</h3>
-                <span className="text-xs bg-slate-800 px-2 py-0.5 rounded-full text-slate-400 font-medium">
+              <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-300">{col.title}</h3>
+                <span className="text-[11px] font-mono bg-zinc-800 px-2 py-0.5 rounded-full text-zinc-400 font-semibold border border-zinc-700/60">
                   {colGoals.length}
                 </span>
               </div>
@@ -67,8 +67,8 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className={`flex flex-col gap-3 min-h-[400px] rounded-xl transition-colors ${
-                      snapshot.isDraggingOver ? 'bg-slate-800/30' : ''
+                    className={`flex flex-col gap-2.5 min-h-[400px] rounded-lg p-1 transition-colors ${
+                      snapshot.isDraggingOver ? 'bg-zinc-800/30' : ''
                     }`}
                   >
                     {colGoals.map((goal, index) => (
@@ -80,7 +80,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                             {...dragProvided.dragHandleProps}
                             style={{
                               ...dragProvided.draggableProps.style,
-                              opacity: dragSnapshot.isDragging ? 0.9 : 1,
+                              opacity: dragSnapshot.isDragging ? 0.85 : 1,
                             }}
                           >
                             <GoalCard

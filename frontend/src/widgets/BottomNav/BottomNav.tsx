@@ -1,4 +1,4 @@
-﻿import React from 'react'
+import React from 'react'
 import { NavLink } from 'react-router-dom'
 import {
   LayoutDashboard,
@@ -21,17 +21,17 @@ export const BottomNav: React.FC = () => {
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 flex items-center justify-around py-2 px-1 md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#0e0e11]/95 backdrop-blur-md border-t border-zinc-800 flex items-center justify-around py-1.5 px-1 md:hidden">
       {navItems.map((item) => (
         <NavLink
           key={item.to}
           to={item.to}
           className={({ isActive }) =>
             cn(
-              'flex flex-col items-center gap-1 py-1 px-2 rounded-xl text-[10px] font-medium transition-all',
+              'flex flex-col items-center gap-0.5 py-1 px-2 rounded-lg text-[10px] font-medium transition-colors',
               isActive
                 ? 'text-emerald-400 font-semibold'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-zinc-500 hover:text-zinc-300'
             )
           }
         >
@@ -39,11 +39,11 @@ export const BottomNav: React.FC = () => {
             <>
               <div
                 className={cn(
-                  'p-1.5 rounded-lg transition-all',
-                  isActive ? 'bg-emerald-500/10 text-emerald-400' : ''
+                  'p-1 rounded-md transition-colors',
+                  isActive ? 'bg-zinc-800 text-emerald-400' : ''
                 )}
               >
-                <item.icon className="w-5 h-5" />
+                <item.icon className="w-4 h-4" />
               </div>
               <span>{item.label}</span>
             </>

@@ -24,6 +24,7 @@ import type { Transaction, TransactionSummary } from '@/entities/transaction/mod
 import type { Goal } from '@/entities/goal/model/types'
 import type { BalanceTrendPoint } from '@/entities/analytics/model/types'
 import { useUserStore } from '@/entities/user/model/userStore'
+import { formatCurrency, formatDate } from '@/shared/lib/format'
 
 export const DashboardPage: React.FC = () => {
   const user = useUserStore((state) => state.user)
@@ -74,73 +75,76 @@ export const DashboardPage: React.FC = () => {
   }, [loadDashboardData])
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">
+          <h1 className="text-xl font-bold tracking-tight text-[#f0f6fc]">
             С возвращением, {user?.name || 'Пользователь'}! 👋
           </h1>
-          <p className="text-sm text-slate-400">Обзор ваших личных финансов за текущий месяц</p>
+          <p className="text-xs text-[#8d96a0]">
+            Сводка личных финансов и целей за текущий месяц
+          </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex items-center gap-2.5">
           <Button variant="secondary" size="sm" onClick={() => setIsGoalModalOpen(true)}>
-            <Plus className="w-4 h-4 mr-1.5" />
+            <Plus className="w-3.5 h-3.5 mr-1" />
             Добавить цель
           </Button>
           <Button size="sm" onClick={() => setIsTxModalOpen(true)}>
-            <Plus className="w-4 h-4 mr-1.5" />
+            <Plus className="w-3.5 h-3.5 mr-1" />
             Новая транзакция
           </Button>
         </div>
       </div>
 
       {loading ? (
-        <div className="p-16 text-center text-sm text-slate-500">Загрузка дашборда...</div>
+        <div className="p-16 text-center text-xs text-zinc-500">Загрузка данных...</div>
       ) : (
         <>
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Balance */}
-            <div className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col justify-between shadow-sm relative overflow-hidden">
+            <div className="bg-[#161b22] p-5 rounded-xl border border-[#30363d] shadow-xs flex flex-col justify-between">
               <div className="flex justify-between items-start">
-                <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+                <span className="text-xs font-medium text-[#8d96a0] uppercase tracking-wider">
                   Чистый остаток (Месяц)
                 </span>
-                <div className="p-2 bg-slate-800/80 rounded-xl text-slate-400">
-                  <Wallet className="w-4 h-4" />
+                <div className="p-1.5 bg-zinc-800/60 border border-zinc-700/60 rounded-md text-zinc-400">
+                  <Wallet className="w-3.5 h-3.5" />
                 </div>
               </div>
 
-              <div className="my-3">
+              <div className="my-2">
                 <span
-                  className={`text-3xl font-extrabold ${
-                    Number(summary.balance) >= 0 ? 'text-slate-100' : 'text-rose-400'
+                  className={`text-2xl lg:text-3xl font-bold font-mono tracking-tight ${
+                    Number(summary.balance) >= 0 ? 'text-[#f0f6fc]' : 'text-[#f85149]'
                   }`}
                 >
-                  {Number(summary.balance).toLocaleString('ru-RU')} {currency}
+                  {formatCurrency(summary.balance, currency)}
                 </span>
               </div>
 
               {miniTrend.length > 1 && (
-                <div className="w-full h-10 mt-1">
+                <div className="w-full h-8 mt-1">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={miniTrend}>
                       <Tooltip
-                        formatter={(val: any) => [`${Number(val).toLocaleString('ru-RU')} ${currency}`, '']}
-                        labelFormatter={(d) => (d ? new Date(String(d)).toLocaleDateString('ru-RU') : '')}
+                        formatter={(val: any) => [formatCurrency(val, currency), 'Баланс']}
+                        labelFormatter={(d) => formatDate(String(d))}
                         contentStyle={{
-                          backgroundColor: '#0f172a',
-                          borderColor: '#334155',
-                          borderRadius: '8px',
+                          backgroundColor: '#161b22',
+                          borderColor: '#30363d',
+                          borderRadius: '6px',
                           fontSize: '11px',
+                          color: '#f0f6fc',
                           padding: '4px 8px',
                         }}
                       />
                       <Line
                         type="monotone"
                         dataKey="balance"
-                        stroke="#10b981"
+                        stroke="#3fb950"
                         strokeWidth={2}
                         dot={false}
                       />
@@ -151,77 +155,77 @@ export const DashboardPage: React.FC = () => {
             </div>
 
             {/* Income */}
-            <div className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col justify-between shadow-sm">
-              <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+            <div className="bg-[#161b22] p-5 rounded-xl border border-[#30363d] shadow-xs flex flex-col justify-between">
+              <span className="text-xs font-medium text-[#8d96a0] uppercase tracking-wider">
                 Доходы за месяц
               </span>
-              <div className="my-3">
-                <span className="text-3xl font-extrabold text-emerald-400">
-                  +{Number(summary.totalIncome).toLocaleString('ru-RU')} {currency}
+              <div className="my-2">
+                <span className="text-2xl lg:text-3xl font-bold font-mono tracking-tight text-[#3fb950]">
+                  +{formatCurrency(summary.totalIncome, currency)}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-emerald-400 text-xs font-medium">
-                <TrendingUp className="w-4 h-4" />
-                <span>Поступления за текущий месяц</span>
+              <div className="flex items-center gap-1.5 text-[#3fb950] text-xs font-medium">
+                <TrendingUp className="w-3.5 h-3.5" />
+                <span className="text-[11px]">Поступления за месяц</span>
               </div>
             </div>
 
             {/* Expenses */}
-            <div className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col justify-between shadow-sm">
-              <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+            <div className="bg-[#161b22] p-5 rounded-xl border border-[#30363d] shadow-xs flex flex-col justify-between">
+              <span className="text-xs font-medium text-[#8d96a0] uppercase tracking-wider">
                 Расходы за месяц
               </span>
-              <div className="my-3">
-                <span className="text-3xl font-extrabold text-rose-400">
-                  -{Number(summary.totalExpense).toLocaleString('ru-RU')} {currency}
+              <div className="my-2">
+                <span className="text-2xl lg:text-3xl font-bold font-mono tracking-tight text-[#f85149]">
+                  -{formatCurrency(summary.totalExpense, currency)}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-rose-400 text-xs font-medium">
-                <TrendingDown className="w-4 h-4" />
-                <span>Суммарные затраты за месяц</span>
+              <div className="flex items-center gap-1.5 text-[#f85149] text-xs font-medium">
+                <TrendingDown className="w-3.5 h-3.5" />
+                <span className="text-[11px]">Суммарные затраты за месяц</span>
               </div>
             </div>
           </div>
 
           {/* Main Grid: Active Goals & Recent Transactions */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Top Savings Goals */}
-            <div className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col gap-6 shadow-sm">
+            <div className="bg-[#161b22] p-5 rounded-xl border border-[#30363d] shadow-xs flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <PiggyBank className="w-5 h-5 text-amber-400" />
-                  <h2 className="font-semibold text-slate-100">Активные накопления</h2>
+                  <PiggyBank className="w-4 h-4 text-[#d29922]" />
+                  <h2 className="text-sm font-bold text-[#f0f6fc]">Активные накопления</h2>
                 </div>
                 <Link
                   to="/app/kanban"
-                  className="text-xs text-slate-400 hover:text-emerald-400 flex items-center gap-1 font-medium"
+                  className="text-xs text-[#8d96a0] hover:text-emerald-400 flex items-center gap-1 font-medium transition-colors"
                 >
-                  Все цели <ArrowRight className="w-3.5 h-3.5" />
+                  Все цели <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
 
               {topSavings.length === 0 ? (
-                <div className="p-8 text-center text-xs text-slate-500 bg-slate-950/40 rounded-xl border border-slate-800">
+                <div className="p-6 text-center text-xs text-[#8d96a0] bg-zinc-950/40 rounded-lg border border-zinc-800">
                   Активных накоплений пока нет.{' '}
                   <button
                     onClick={() => setIsGoalModalOpen(true)}
-                    className="text-emerald-400 underline ml-1 cursor-pointer"
+                    className="text-emerald-400 hover:underline ml-1 cursor-pointer font-medium"
                   >
                     Создать цель
                   </button>
                 </div>
               ) : (
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3">
                   {topSavings.map((goal) => (
                     <div
                       key={goal.id}
-                      className="p-4 bg-slate-800/40 border border-slate-800/80 rounded-xl flex flex-col gap-2 hover:border-slate-700 transition-all"
+                      className="p-3.5 bg-zinc-900/70 border border-zinc-800/80 rounded-lg flex flex-col gap-2 hover:border-zinc-700 transition-colors"
                     >
-                      <div className="flex justify-between items-center text-sm font-medium">
-                        <span className="text-slate-200">{goal.title}</span>
+                      <div className="flex justify-between items-center text-xs font-medium">
+                        <span className="text-zinc-200">{goal.title}</span>
                         <button
                           onClick={() => setDepositGoal(goal)}
-                          className="text-xs text-emerald-400 hover:underline font-semibold cursor-pointer"
+                          className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold cursor-pointer"
                         >
                           + Пополнить
                         </button>
@@ -229,7 +233,7 @@ export const DashboardPage: React.FC = () => {
                       <ProgressBar
                         current={Number(goal.currentAmount)}
                         target={Number(goal.targetAmount || 0)}
-                        color="bg-amber-500"
+                        color="bg-amber-400"
                       />
                     </div>
                   ))}
@@ -238,97 +242,97 @@ export const DashboardPage: React.FC = () => {
             </div>
 
             {/* Upcoming Reminders */}
-            <div className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col gap-6 shadow-sm">
+            <div className="bg-[#161b22] p-5 rounded-xl border border-[#30363d] shadow-xs flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Bell className="w-5 h-5 text-purple-400" />
-                  <h2 className="font-semibold text-slate-100">Ближайшие напоминания (ЖКХ, счета)</h2>
+                  <Bell className="w-4 h-4 text-purple-400" />
+                  <h2 className="text-sm font-bold text-[#f0f6fc]">Ближайшие напоминания (ЖКХ, счета)</h2>
                 </div>
                 <Link
                   to="/app/kanban"
-                  className="text-xs text-slate-400 hover:text-purple-400 flex items-center gap-1 font-medium"
+                  className="text-xs text-[#8d96a0] hover:text-purple-400 flex items-center gap-1 font-medium transition-colors"
                 >
-                  Канбан <ArrowRight className="w-3.5 h-3.5" />
+                  Канбан <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
 
               {upcomingReminders.length === 0 ? (
-                <div className="p-8 text-center text-xs text-slate-500 bg-slate-950/40 rounded-xl border border-slate-800">
+                <div className="p-6 text-center text-xs text-[#8d96a0] bg-zinc-950/40 rounded-lg border border-zinc-800">
                   На ближайшие 7 дней напоминаний нет.
                 </div>
               ) : (
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2.5">
                   {upcomingReminders.map((reminder) => (
                     <div
                       key={reminder.id}
-                      className="p-4 bg-slate-800/40 border border-slate-800/80 rounded-xl flex items-center justify-between"
+                      className="p-3 bg-zinc-900/70 border border-zinc-800/80 rounded-lg flex items-center justify-between"
                     >
                       <div>
-                        <h3 className="text-sm font-medium text-slate-200">{reminder.title}</h3>
-                        <p className="text-xs text-purple-400 mt-0.5">
-                          Дедлайн: {reminder.dueDate ? new Date(reminder.dueDate).toLocaleDateString('ru-RU') : 'Скоро'}
+                        <h3 className="text-xs font-medium text-zinc-200">{reminder.title}</h3>
+                        <p className="text-[11px] text-purple-400 mt-0.5">
+                          Дедлайн: {reminder.dueDate ? formatDate(reminder.dueDate) : 'Скоро'}
                         </p>
                       </div>
-                      <Badge variant="reminder">REMINDER</Badge>
+                      <Badge variant="reminder">НАПОМИНАНИЕ</Badge>
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Recent Transactions (Full width on bottom) */}
-            <div className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col gap-6 shadow-sm lg:col-span-2">
+            {/* Recent Transactions */}
+            <div className="bg-[#161b22] p-5 rounded-xl border border-[#30363d] shadow-xs flex flex-col gap-4 lg:col-span-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <ArrowLeftRight className="w-5 h-5 text-emerald-400" />
-                  <h2 className="font-semibold text-slate-100">Последние транзакции</h2>
+                  <ArrowLeftRight className="w-4 h-4 text-emerald-400" />
+                  <h2 className="text-sm font-bold text-[#f0f6fc]">Последние транзакции</h2>
                 </div>
                 <Link
                   to="/app/transactions"
-                  className="text-xs text-slate-400 hover:text-emerald-400 flex items-center gap-1 font-medium"
+                  className="text-xs text-[#8d96a0] hover:text-emerald-400 flex items-center gap-1 font-medium transition-colors"
                 >
-                  Все транзакции <ArrowRight className="w-3.5 h-3.5" />
+                  Все транзакции <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
 
               {recentTransactions.length === 0 ? (
-                <div className="p-8 text-center text-xs text-slate-500 bg-slate-950/40 rounded-xl border border-slate-800">
+                <div className="p-6 text-center text-xs text-[#8d96a0] bg-zinc-950/40 rounded-lg border border-zinc-800">
                   Транзакций пока нет.{' '}
                   <button
                     onClick={() => setIsTxModalOpen(true)}
-                    className="text-emerald-400 underline ml-1 cursor-pointer"
+                    className="text-emerald-400 hover:underline ml-1 cursor-pointer font-medium"
                   >
                     Добавить первую запись
                   </button>
                 </div>
               ) : (
-                <div className="divide-y divide-slate-800/80">
+                <div className="divide-y divide-zinc-800/80">
                   {recentTransactions.map((tx) => {
                     const isIncome = tx.type === 'INCOME'
                     return (
                       <div
                         key={tx.id}
-                        className="py-3 flex items-center justify-between hover:bg-slate-800/20 transition-colors"
+                        className="py-2.5 flex items-center justify-between hover:bg-zinc-800/30 px-2 rounded transition-colors"
                       >
                         <div className="flex items-center gap-3">
                           <Badge variant={isIncome ? 'income' : 'expense'}>
                             {isIncome ? '+ Доход' : '- Расход'}
                           </Badge>
                           <div>
-                            <span className="text-sm font-medium text-slate-200">
+                            <span className="text-xs font-medium text-zinc-200">
                               {tx.description || tx.category}
                             </span>
-                            <span className="text-xs text-slate-500 block">
-                              {tx.category} • {new Date(tx.date).toLocaleDateString('ru-RU')}
+                            <span className="text-[11px] text-[#8d96a0] block">
+                              {tx.category} • {formatDate(tx.date)}
                             </span>
                           </div>
                         </div>
                         <span
-                          className={`font-bold text-sm ${
-                            isIncome ? 'text-emerald-400' : 'text-rose-400'
+                          className={`font-mono font-bold text-xs ${
+                            isIncome ? 'text-[#3fb950]' : 'text-[#f85149]'
                           }`}
                         >
-                          {isIncome ? '+' : '-'}{Number(tx.amount).toLocaleString('ru-RU')} {currency}
+                          {isIncome ? '+' : '-'}{formatCurrency(tx.amount, currency)}
                         </span>
                       </div>
                     )

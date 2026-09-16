@@ -17,17 +17,17 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   const percentage = Math.min(100, Math.max(0, target > 0 ? (current / target) * 100 : 0))
 
   return (
-    <div className={cn('w-full flex flex-col gap-1', className)}>
-      <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+    <div className={cn('w-full flex flex-col gap-1.5', className)}>
+      <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
         <div
           className={cn('h-full rounded-full transition-all duration-500', color)}
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="flex justify-between text-xs text-slate-400">
-        <span>{percentage.toFixed(0)}%</span>
+      <div className="flex justify-between text-[11px] font-mono text-zinc-400">
+        <span className="font-semibold text-zinc-300">{percentage.toFixed(0)}%</span>
         <span>
-          {current.toLocaleString()} / {target.toLocaleString()}
+          {current.toLocaleString('ru-RU')} / {target.toLocaleString('ru-RU')}
         </span>
       </div>
     </div>

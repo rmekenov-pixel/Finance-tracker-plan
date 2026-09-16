@@ -61,17 +61,17 @@ export const KanbanPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Канбан-доска: Цели и задачи</h1>
-          <p className="text-sm text-slate-400">
+          <h1 className="text-xl font-bold tracking-tight text-[#f0f6fc]">Канбан-доска: Цели и задачи</h1>
+          <p className="text-xs text-[#8d96a0]">
             Управляйте финансовыми целями, задачами и напоминаниями с помощью Drag & Drop
           </p>
         </div>
         <Button size="sm" onClick={() => setIsCreateModalOpen(true)}>
-          <Plus className="w-4 h-4 mr-1.5" />
+          <Plus className="w-3.5 h-3.5 mr-1" />
           Создать карточку
         </Button>
       </div>
@@ -80,10 +80,10 @@ export const KanbanPage: React.FC = () => {
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
         <button
           onClick={() => setSelectedCategory('')}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
             selectedCategory === ''
-              ? 'bg-slate-100 text-slate-900 font-semibold'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+              ? 'bg-zinc-100 text-zinc-950 border-zinc-200 font-semibold shadow-xs'
+              : 'bg-[#161b22] border-[#30363d] text-[#8d96a0] hover:text-zinc-200'
           }`}
         >
           <LayoutGrid className="w-3.5 h-3.5" />
@@ -92,44 +92,44 @@ export const KanbanPage: React.FC = () => {
 
         <button
           onClick={() => setSelectedCategory('SAVING')}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
             selectedCategory === 'SAVING'
-              ? 'bg-amber-500 text-white font-semibold shadow-lg shadow-amber-500/20'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+              ? 'bg-amber-500/15 text-amber-400 border-amber-500/30 font-semibold'
+              : 'bg-[#161b22] border-[#30363d] text-[#8d96a0] hover:text-zinc-200'
           }`}
         >
           <PiggyBank className="w-3.5 h-3.5" />
-          Накопления (SAVING)
+          Накопления
         </button>
 
         <button
           onClick={() => setSelectedCategory('TASK')}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
             selectedCategory === 'TASK'
-              ? 'bg-blue-500 text-white font-semibold shadow-lg shadow-blue-500/20'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+              ? 'bg-blue-500/15 text-blue-400 border-blue-500/30 font-semibold'
+              : 'bg-[#161b22] border-[#30363d] text-[#8d96a0] hover:text-zinc-200'
           }`}
         >
           <CheckSquare className="w-3.5 h-3.5" />
-          Задачи (TASK)
+          Задачи
         </button>
 
         <button
           onClick={() => setSelectedCategory('REMINDER')}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
             selectedCategory === 'REMINDER'
-              ? 'bg-purple-500 text-white font-semibold shadow-lg shadow-purple-500/20'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+              ? 'bg-purple-500/15 text-purple-400 border-purple-500/30 font-semibold'
+              : 'bg-[#161b22] border-[#30363d] text-[#8d96a0] hover:text-zinc-200'
           }`}
         >
           <Bell className="w-3.5 h-3.5" />
-          Напоминания (REMINDER)
+          Напоминания
         </button>
       </div>
 
       {/* Board */}
       {loading ? (
-        <div className="p-12 text-center text-sm text-slate-500">Загрузка канбан-доски...</div>
+        <div className="p-12 text-center text-xs text-zinc-500">Загрузка канбан-доски...</div>
       ) : (
         <KanbanBoard
           goals={goals}

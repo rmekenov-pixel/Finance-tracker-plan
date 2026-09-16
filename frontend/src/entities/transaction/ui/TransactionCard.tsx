@@ -3,6 +3,7 @@ import { Trash2 } from 'lucide-react'
 import type { Transaction } from '../model/types'
 import { Badge } from '@/shared/ui/Badge'
 import { useUserStore } from '@/entities/user/model/userStore'
+import { formatCurrency, formatDate } from '@/shared/lib/format'
 
 interface TransactionCardProps {
   transaction: Transaction
@@ -14,37 +15,37 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({ transaction, o
   const isIncome = transaction.type === 'INCOME'
 
   return (
-    <div className="p-4 flex items-center justify-between hover:bg-slate-800/40 transition-colors border-b border-slate-800/80 last:border-0">
-      <div className="flex items-center gap-4">
+    <div className="p-3.5 flex items-center justify-between hover:bg-zinc-800/40 transition-colors border-b border-zinc-800/80 last:border-0">
+      <div className="flex items-center gap-3">
         <Badge variant={isIncome ? 'income' : 'expense'}>
           {isIncome ? '+ Доход' : '- Расход'}
         </Badge>
         <div>
-          <h4 className="text-sm font-semibold text-slate-200">
+          <h4 className="text-xs font-semibold text-zinc-200">
             {transaction.description || transaction.category}
           </h4>
-          <p className="text-xs text-slate-400">
-            Категория: {transaction.category} • {new Date(transaction.date).toLocaleDateString('ru-RU')}
+          <p className="text-[11px] text-[#8d96a0]">
+            Категория: {transaction.category} • {formatDate(transaction.date)}
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <span
-          className={`font-bold text-base ${
-            isIncome ? 'text-emerald-400' : 'text-rose-400'
+          className={`font-mono font-bold text-xs ${
+            isIncome ? 'text-[#3fb950]' : 'text-[#f85149]'
           }`}
         >
-          {isIncome ? '+' : '-'}{Number(transaction.amount).toLocaleString('ru-RU')} {currency}
+          {isIncome ? '+' : '-'}{formatCurrency(transaction.amount, currency)}
         </span>
 
         {onDelete && (
           <button
             onClick={() => onDelete(transaction.id)}
-            className="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+            className="text-zinc-500 hover:text-rose-400 p-1.5 rounded-md hover:bg-zinc-800 transition-colors cursor-pointer border border-transparent hover:border-zinc-700"
             title="Удалить"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-3.5 h-3.5" />
           </button>
         )}
       </div>

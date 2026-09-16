@@ -40,17 +40,17 @@ export const NotesPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Заметки и комментарии</h1>
-          <p className="text-sm text-slate-400">
+          <h1 className="text-xl font-bold tracking-tight text-[#f0f6fc]">Заметки и комментарии</h1>
+          <p className="text-xs text-[#8d96a0]">
             Свободные заметки и важные напоминания, привязанные к расходам и целям
           </p>
         </div>
         <Button size="sm" onClick={() => setIsCreateModalOpen(true)}>
-          <Plus className="w-4 h-4 mr-1.5" />
+          <Plus className="w-3.5 h-3.5 mr-1" />
           Новая заметка
         </Button>
       </div>
@@ -59,10 +59,10 @@ export const NotesPage: React.FC = () => {
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
         <button
           onClick={() => setFilterType('')}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
             filterType === ''
-              ? 'bg-slate-100 text-slate-900 font-semibold'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+              ? 'bg-zinc-100 text-zinc-950 border-zinc-200 font-semibold shadow-xs'
+              : 'bg-[#161b22] border-[#30363d] text-[#8d96a0] hover:text-zinc-200'
           }`}
         >
           <LayoutGrid className="w-3.5 h-3.5" />
@@ -71,10 +71,10 @@ export const NotesPage: React.FC = () => {
 
         <button
           onClick={() => setFilterType('GENERAL')}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
             filterType === 'GENERAL'
-              ? 'bg-emerald-500 text-white font-semibold shadow-lg shadow-emerald-500/20'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+              ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30 font-semibold'
+              : 'bg-[#161b22] border-[#30363d] text-[#8d96a0] hover:text-zinc-200'
           }`}
         >
           <StickyNote className="w-3.5 h-3.5" />
@@ -83,10 +83,10 @@ export const NotesPage: React.FC = () => {
 
         <button
           onClick={() => setFilterType('TRANSACTION')}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
             filterType === 'TRANSACTION'
-              ? 'bg-blue-500 text-white font-semibold shadow-lg shadow-blue-500/20'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+              ? 'bg-blue-500/15 text-blue-400 border-blue-500/30 font-semibold'
+              : 'bg-[#161b22] border-[#30363d] text-[#8d96a0] hover:text-zinc-200'
           }`}
         >
           <ArrowLeftRight className="w-3.5 h-3.5" />
@@ -95,10 +95,10 @@ export const NotesPage: React.FC = () => {
 
         <button
           onClick={() => setFilterType('GOAL')}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
             filterType === 'GOAL'
-              ? 'bg-amber-500 text-white font-semibold shadow-lg shadow-amber-500/20'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+              ? 'bg-amber-500/15 text-amber-400 border-amber-500/30 font-semibold'
+              : 'bg-[#161b22] border-[#30363d] text-[#8d96a0] hover:text-zinc-200'
           }`}
         >
           <Target className="w-3.5 h-3.5" />
@@ -108,23 +108,23 @@ export const NotesPage: React.FC = () => {
 
       {/* Content Grid */}
       {loading ? (
-        <div className="p-12 text-center text-sm text-slate-500">Загрузка заметок...</div>
+        <div className="p-12 text-center text-xs text-zinc-500">Загрузка заметок...</div>
       ) : notes.length === 0 ? (
-        <div className="p-12 text-center flex flex-col items-center gap-3 bg-slate-900 border border-slate-800 rounded-2xl">
-          <div className="p-3 bg-slate-800 rounded-2xl text-slate-500">
-            <StickyNote className="w-8 h-8" />
+        <div className="p-12 text-center flex flex-col items-center gap-2.5 bg-[#161b22] border border-[#30363d] rounded-xl shadow-xs">
+          <div className="p-2.5 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-500">
+            <StickyNote className="w-6 h-6" />
           </div>
-          <h3 className="font-semibold text-slate-300">Заметок пока нет</h3>
-          <p className="text-xs text-slate-500 max-w-sm">
+          <h3 className="text-xs font-semibold text-zinc-300">Заметок пока нет</h3>
+          <p className="text-[11px] text-[#8d96a0] max-w-sm">
             Записывайте важные финансовые мысли, планы или комментарии к покупкам.
           </p>
-          <Button size="sm" onClick={() => setIsCreateModalOpen(true)} className="mt-2">
-            <Plus className="w-4 h-4 mr-1.5" />
+          <Button size="sm" onClick={() => setIsCreateModalOpen(true)} className="mt-1">
+            <Plus className="w-3.5 h-3.5 mr-1" />
             Создать первую заметку
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {notes.map((note) => (
             <NoteCard key={note.id} note={note} onDelete={handleDelete} />
           ))}

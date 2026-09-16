@@ -79,39 +79,39 @@ export const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-8 max-w-2xl pb-16">
+    <div className="flex flex-col gap-5 max-w-2xl pb-16">
       <div>
-        <h1 className="text-2xl font-bold text-slate-100">Настройки профиля</h1>
-        <p className="text-sm text-slate-400">Управление учетной записью, валютой и безопасностью</p>
+        <h1 className="text-xl font-bold tracking-tight text-[#f0f6fc]">Настройки профиля</h1>
+        <p className="text-xs text-[#8d96a0]">Управление учетной записью, валютой и безопасностью</p>
       </div>
 
       {/* Main Profile Info Form */}
-      <form onSubmit={handleUpdateProfile} className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-2xl">
+      <form onSubmit={handleUpdateProfile} className="p-5 bg-[#161b22] border border-[#30363d] rounded-xl flex flex-col gap-5 shadow-xs">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-full bg-zinc-900 border border-zinc-700/80 flex items-center justify-center text-emerald-400 font-bold text-lg">
             {name?.[0]?.toUpperCase() || 'U'}
           </div>
           <div>
-            <h3 className="font-semibold text-slate-200 text-lg">{name || 'Пользователь'}</h3>
-            <p className="text-xs text-slate-400">{user?.email || 'user@example.com'}</p>
+            <h3 className="font-semibold text-[#f0f6fc] text-sm">{name || 'Пользователь'}</h3>
+            <p className="text-xs text-[#8d96a0] font-mono">{user?.email || 'user@example.com'}</p>
           </div>
         </div>
 
         {profileSuccess && (
-          <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-2 text-emerald-400 text-sm">
+          <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center gap-2 text-[#3fb950] text-xs">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>{profileSuccess}</span>
           </div>
         )}
 
         {profileError && (
-          <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-2 text-rose-400 text-sm">
+          <div className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-lg flex items-center gap-2 text-[#f85149] text-xs">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{profileError}</span>
           </div>
         )}
 
-        <div className="flex flex-col gap-4 pt-4 border-t border-slate-800">
+        <div className="flex flex-col gap-3.5 pt-3 border-t border-zinc-800/80">
           <Input
             label="Отображаемое имя"
             value={name}
@@ -120,11 +120,11 @@ export const ProfilePage: React.FC = () => {
           />
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-slate-400">Основная валюта</label>
+            <label className="text-xs font-medium text-zinc-400">Основная валюта</label>
             <select
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm cursor-pointer"
+              className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700/80 rounded-lg text-zinc-100 focus:outline-none focus:border-emerald-500 transition-all text-xs cursor-pointer font-mono"
             >
               <option value="KZT">KZT (₸) — Казахстанский тенге</option>
               <option value="USD">USD ($) — Доллар США</option>
@@ -133,40 +133,40 @@ export const ProfilePage: React.FC = () => {
             </select>
           </div>
 
-          <Button type="submit" disabled={profileLoading} className="w-fit mt-2">
-            {profileLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+          <Button type="submit" disabled={profileLoading} className="w-fit mt-1">
+            {profileLoading ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1.5" />}
             Сохранить данные
           </Button>
         </div>
       </form>
 
       {/* Change Password Form */}
-      <form onSubmit={handleChangePassword} className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col gap-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-xl">
-            <KeyRound className="w-5 h-5" />
+      <form onSubmit={handleChangePassword} className="p-5 bg-[#161b22] border border-[#30363d] rounded-xl flex flex-col gap-5 shadow-xs">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 bg-amber-500/10 border border-amber-500/20 text-[#d29922] rounded-lg">
+            <KeyRound className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-200">Безопасность и пароль</h3>
-            <p className="text-xs text-slate-400">Смена пароля вашей учетной записи</p>
+            <h3 className="font-semibold text-[#f0f6fc] text-xs">Безопасность и пароль</h3>
+            <p className="text-[11px] text-[#8d96a0]">Смена пароля вашей учетной записи</p>
           </div>
         </div>
 
         {pwdSuccess && (
-          <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-2 text-emerald-400 text-sm">
+          <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center gap-2 text-[#3fb950] text-xs">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>{pwdSuccess}</span>
           </div>
         )}
 
         {pwdError && (
-          <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-2 text-rose-400 text-sm">
+          <div className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-lg flex items-center gap-2 text-[#f85149] text-xs">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{pwdError}</span>
           </div>
         )}
 
-        <div className="flex flex-col gap-4 pt-4 border-t border-slate-800">
+        <div className="flex flex-col gap-3.5 pt-3 border-t border-zinc-800/80">
           <Input
             label="Текущий пароль"
             type="password"
@@ -194,8 +194,8 @@ export const ProfilePage: React.FC = () => {
             required
           />
 
-          <Button type="submit" variant="secondary" disabled={pwdLoading} className="w-fit mt-2">
-            {pwdLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <KeyRound className="w-4 h-4 mr-2" />}
+          <Button type="submit" variant="secondary" disabled={pwdLoading} className="w-fit mt-1">
+            {pwdLoading ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <KeyRound className="w-3.5 h-3.5 mr-1.5" />}
             Обновить пароль
           </Button>
         </div>

@@ -4,6 +4,7 @@ import type { Goal } from '../model/types'
 import { Badge } from '@/shared/ui/Badge'
 import { ProgressBar } from '@/shared/ui/ProgressBar'
 import { useUserStore } from '@/entities/user/model/userStore'
+import { formatCurrency, formatDate } from '@/shared/lib/format'
 
 interface GoalCardProps {
   goal: Goal
@@ -24,15 +25,21 @@ export const GoalCard: React.FC<GoalCardProps> = ({
   const isReminder = goal.category === 'REMINDER'
   const isDone = goal.status === 'DONE'
 
+  const categoryLabels = {
+    SAVING: 'Накопление',
+    TASK: 'Задача',
+    REMINDER: 'Напоминание',
+  }
+
   return (
-    <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl shadow-sm flex flex-col gap-3 hover:border-slate-700 transition-all">
+    <div className="p-3.5 bg-[#161b22] border border-[#30363d] rounded-lg shadow-xs flex flex-col gap-2.5 hover:border-zinc-700 transition-colors">
       {/* Header */}
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2 flex-1">
           {isTask && onToggleTask && (
             <button
               onClick={() => onToggleTask(goal)}
-              className="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer"
+              className="text-zinc-500 hover:text-emerald-400 transition-colors cursor-pointer"
             >
               {isDone ? (
                 <CheckSquare className="w-4 h-4 text-emerald-400" />
@@ -43,8 +50,8 @@ export const GoalCard: React.FC<GoalCardProps> = ({
           )}
 
           <h4
-            className={`text-sm font-semibold leading-tight text-slate-100 ${
-              isDone && isTask ? 'line-through text-slate-500' : ''
+            className={`text-xs font-semibold leading-snug text-zinc-100 ${
+              isDone && isTask ? 'line-through text-zinc-500' : ''
             }`}
           >
             {goal.title}
@@ -63,13 +70,13 @@ export const GoalCard: React.FC<GoalCardProps> = ({
                 : 'default'
             }
           >
-            {goal.category}
+            {categoryLabels[goal.category] || goal.category}
           </Badge>
 
           {onDelete && (
             <button
               onClick={() => onDelete(goal.id)}
-              className="text-slate-500 hover:text-rose-400 p-1 rounded hover:bg-slate-800 transition-colors cursor-pointer"
+              className="text-zinc-500 hover:text-rose-400 p-1 rounded hover:bg-zinc-800 transition-colors cursor-pointer"
               title="Удалить"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -84,18 +91,18 @@ export const GoalCard: React.FC<GoalCardProps> = ({
           <ProgressBar
             current={Number(goal.currentAmount)}
             target={Number(goal.targetAmount)}
-            color={isDone ? 'bg-emerald-500' : 'bg-amber-500'}
+            color={isDone ? 'bg-emerald-500' : 'bg-amber-400'}
           />
-          <div className="flex justify-between items-center text-xs text-slate-400 pt-1">
+          <div className="flex justify-between items-center text-[11px] font-mono text-zinc-400 pt-0.5">
             <span>
-              {Number(goal.currentAmount).toLocaleString('ru-RU')} / {Number(goal.targetAmount).toLocaleString('ru-RU')} {currency}
+              {formatCurrency(goal.currentAmount, currency)} / {formatCurrency(goal.targetAmount, currency)}
             </span>
             {onAddDeposit && !isDone && (
               <button
                 onClick={() => onAddDeposit(goal)}
                 className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-medium cursor-pointer"
               >
-                <PlusCircle className="w-3.5 h-3.5" />
+                <PlusCircle className="w-3 h-3" />
                 Пополнить
               </button>
             )}
@@ -105,16 +112,16 @@ export const GoalCard: React.FC<GoalCardProps> = ({
 
       {/* Reminder / Due date */}
       {goal.dueDate && (
-        <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800/60">
+        <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-2 border-t border-zinc-800/80">
           <span className="flex items-center gap-1.5">
             {isReminder ? (
               <Bell className="w-3.5 h-3.5 text-purple-400" />
             ) : (
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
+              <Calendar className="w-3.5 h-3.5 text-zinc-400" />
             )}
-            До {new Date(goal.dueDate).toLocaleDateString('ru-RU')}
+            До {formatDate(goal.dueDate)}
           </span>
-          {isDone && <span className="text-emerald-400 font-medium">Выполнено</span>}
+          {isDone && <span className="text-[#3fb950] font-medium">Выполнено</span>}
         </div>
       )}
     </div>

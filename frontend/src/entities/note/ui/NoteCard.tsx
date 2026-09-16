@@ -2,6 +2,7 @@ import React from 'react'
 import { Trash2, Link as LinkIcon, Calendar } from 'lucide-react'
 import type { Note } from '../model/types'
 import { Badge } from '@/shared/ui/Badge'
+import { formatDate } from '@/shared/lib/format'
 
 interface NoteCardProps {
   note: Note
@@ -32,30 +33,30 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onDelete }) => {
   }
 
   return (
-    <div className="p-5 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col justify-between gap-4 hover:border-slate-700 transition-all shadow-sm">
-      <p className="text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">
+    <div className="p-4 bg-[#161b22] border border-[#30363d] rounded-xl flex flex-col justify-between gap-3 hover:border-zinc-700 transition-colors shadow-xs">
+      <p className="text-xs text-zinc-200 whitespace-pre-wrap leading-relaxed">
         {note.content}
       </p>
 
-      <div className="flex items-center justify-between pt-3 border-t border-slate-800/80 text-xs">
+      <div className="flex items-center justify-between pt-2.5 border-t border-zinc-800/80 text-[11px]">
         <div className="flex items-center gap-2">
           <Badge variant={getBadgeVariant(note.entityType)}>
             {note.entityType !== 'GENERAL' && <LinkIcon className="w-3 h-3 mr-1" />}
             {getBadgeLabel(note.entityType)}
           </Badge>
-          <span className="flex items-center gap-1 text-slate-500">
+          <span className="flex items-center gap-1 text-[#8d96a0]">
             <Calendar className="w-3 h-3" />
-            {new Date(note.createdAt).toLocaleDateString('ru-RU')}
+            {formatDate(note.createdAt)}
           </span>
         </div>
 
         {onDelete && (
           <button
             onClick={() => onDelete(note.id)}
-            className="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+            className="text-zinc-500 hover:text-rose-400 p-1 rounded hover:bg-zinc-800 transition-colors cursor-pointer border border-transparent hover:border-zinc-700"
             title="Удалить заметку"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-3.5 h-3.5" />
           </button>
         )}
       </div>

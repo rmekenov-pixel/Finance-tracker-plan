@@ -32,18 +32,18 @@ export const RegisterPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col justify-center items-center px-4">
-      <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+    <div className="min-h-screen bg-[#0a0a0c] flex flex-col justify-center items-center px-4">
+      <div className="w-full max-w-md bg-[#161b22] border border-[#30363d] rounded-2xl p-8 shadow-2xl">
         <div className="flex flex-col items-center text-center mb-8">
-          <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20 mb-3">
-            <Wallet className="w-8 h-8" />
+          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4">
+            <Wallet className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-100">Создать аккаунт</h2>
-          <p className="text-sm text-slate-400 mt-1">Начните вести учет финансов легко</p>
+          <h2 className="text-2xl font-bold tracking-tight text-[#f0f6fc]">Создать аккаунт</h2>
+          <p className="text-sm text-[#8d96a0] mt-1.5">Начните вести учет финансов легко</p>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs rounded-xl">
+          <div className="mb-5 p-3.5 bg-red-500/10 border border-red-500/30 text-[#f85149] text-xs rounded-xl">
             {error}
           </div>
         )}
@@ -76,11 +76,11 @@ export const RegisterPage: React.FC = () => {
           />
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-slate-400">Основная валюта</label>
+            <label className="text-xs font-medium text-[#8d96a0]">Основная валюта</label>
             <select
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm"
+              className="w-full px-3.5 py-2.5 bg-[#0a0a0c] border border-[#30363d] rounded-xl text-[#f0f6fc] focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm font-medium"
             >
               <option value="KZT">KZT (₸) — Казахстанский тенге</option>
               <option value="USD">USD ($) — Доллар США</option>
@@ -89,15 +89,15 @@ export const RegisterPage: React.FC = () => {
             </select>
           </div>
 
-          <Button type="submit" disabled={loading} className="w-full mt-2 py-3">
+          <Button type="submit" disabled={loading} className="w-full mt-3 py-3">
             {loading ? 'Создание аккаунта...' : 'Зарегистрироваться'}
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </form>
 
-        <p className="text-center text-xs text-slate-400 mt-6">
+        <p className="text-center text-xs text-[#8d96a0] mt-6">
           Уже есть аккаунт?{' '}
-          <Link to="/auth/login" className="text-emerald-400 hover:underline font-medium">
+          <Link to="/auth/login" className="text-emerald-400 hover:text-emerald-300 hover:underline font-medium">
             Войти
           </Link>
         </p>

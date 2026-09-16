@@ -13,9 +13,9 @@ import { ProfilePage } from '@/pages/app/ProfilePage'
 
 const ProtectedLayout: React.FC = () => {
   return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100 flex-col md:flex-row">
+    <div className="flex min-h-screen bg-[#0a0a0c] text-zinc-100 flex-col md:flex-row">
       <Sidebar />
-      <main className="flex-1 p-4 pb-24 md:p-8 md:pb-8 overflow-y-auto max-h-screen">
+      <main className="flex-1 p-4 pb-24 md:p-6 md:pb-6 overflow-y-auto max-h-screen">
         <div className="max-w-6xl mx-auto">
           <Outlet />
         </div>

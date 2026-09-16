@@ -61,67 +61,67 @@ export const CreateGoalModal: React.FC<CreateGoalModalProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
-      <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl flex flex-col gap-6">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-          <h3 className="text-lg font-bold text-slate-100">Создать цель или задачу</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4">
+      <div className="w-full max-w-md bg-[#161b22] border border-[#30363d] rounded-xl p-5 shadow-2xl flex flex-col gap-4">
+        <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
+          <h3 className="text-sm font-bold text-[#f0f6fc] uppercase tracking-wide">Создать цель или задачу</h3>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-200 p-1 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+            className="text-zinc-400 hover:text-zinc-200 p-1 rounded-md hover:bg-zinc-800 transition-colors cursor-pointer border border-transparent hover:border-zinc-700"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {error && (
-          <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs rounded-xl">
+          <div className="p-2.5 bg-rose-500/10 border border-rose-500/20 text-[#f85149] text-xs rounded-lg">
             {error}
           </div>
         )}
 
         {/* Category selector pills */}
-        <div className="grid grid-cols-3 gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
+        <div className="grid grid-cols-3 gap-1.5 bg-[#0a0a0c] p-1 rounded-lg border border-zinc-800">
           <button
             type="button"
             onClick={() => setCategory('SAVING')}
-            className={`flex flex-col items-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`flex flex-col items-center gap-1 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
               category === 'SAVING'
-                ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 shadow-xs'
+                : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <PiggyBank className="w-4 h-4" />
+            <PiggyBank className="w-3.5 h-3.5" />
             Накопление
           </button>
 
           <button
             type="button"
             onClick={() => setCategory('TASK')}
-            className={`flex flex-col items-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`flex flex-col items-center gap-1 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
               category === 'TASK'
-                ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/40 shadow-xs'
+                : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <CheckSquare className="w-4 h-4" />
+            <CheckSquare className="w-3.5 h-3.5" />
             Задача
           </button>
 
           <button
             type="button"
             onClick={() => setCategory('REMINDER')}
-            className={`flex flex-col items-center gap-1 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`flex flex-col items-center gap-1 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
               category === 'REMINDER'
-                ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/20'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-purple-500/20 text-purple-400 border border-purple-500/40 shadow-xs'
+                : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <Bell className="w-4 h-4" />
+            <Bell className="w-3.5 h-3.5" />
             Напоминание
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
           <Input
             label="Название"
             placeholder={
@@ -163,15 +163,15 @@ export const CreateGoalModal: React.FC<CreateGoalModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-slate-400">Статус</label>
+              <label className="text-xs font-medium text-zinc-400">Статус</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as GoalStatus)}
-                className="w-full px-3.5 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 text-sm"
+                className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700/80 rounded-lg text-zinc-100 focus:outline-none focus:border-emerald-500 text-xs cursor-pointer"
               >
-                <option value="PLANNED">Запланировано</option>
+                <option value="PLANNED">В планах</option>
                 <option value="IN_PROGRESS">В процессе</option>
-                <option value="DONE">Готово</option>
+                <option value="DONE">Выполнено</option>
               </select>
             </div>
 
@@ -183,7 +183,7 @@ export const CreateGoalModal: React.FC<CreateGoalModalProps> = ({
             />
           </div>
 
-          <div className="flex gap-3 mt-3">
+          <div className="flex gap-2.5 mt-2">
             <Button type="button" variant="secondary" onClick={onClose} className="flex-1">
               Отмена
             </Button>
