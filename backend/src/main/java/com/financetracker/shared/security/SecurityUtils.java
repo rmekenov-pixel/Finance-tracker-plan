@@ -1,0 +1,26 @@
+package com.financetracker.shared.security;
+
+import com.financetracker.shared.exception.UnauthorizedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.UUID;
+
+public class SecurityUtils {
+
+    public static UUID getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof UserPrincipal principal) {
+            return principal.getId();
+        }
+        throw new UnauthorizedException("Пользователь не авторизован");
+    }
+
+    public static String getCurrentUserEmail() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof UserPrincipal principal) {
+            return principal.getEmail();
+        }
+        throw new UnauthorizedException("Пользователь не авторизован");
+    }
+}
